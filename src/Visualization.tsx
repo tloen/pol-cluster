@@ -81,9 +81,10 @@ export default class Visualization extends React.Component<VisualizationProps> {
         .data(data)
       .enter().append("circle")
         .attr("class", "dot")
-        .attr("r", 3.5)
+        .attr("r", 5.5)
         .attr("cx", xMap)
         .attr("cy", yMap)
+        .attr("opacity", "0.5")
         .attr("full_name", function(d) { return d[3]; })
         .attr("state", function(d) { return d[4]; })
         .attr("gender", function(d) { return d[5]; })
@@ -96,7 +97,7 @@ export default class Visualization extends React.Component<VisualizationProps> {
             .text(d3.select(this).attr("full_name") + ", " + d3.select(this).attr("state") + ", " + d3.select(this).attr("gender"));
         })
         .on("mouseout", function(d) {
-          d3.select(this).attr("r", 3.5);
+          d3.select(this).attr("r", 5.5);
           return tooltip.style("visibility", "hidden");
         });
   }
