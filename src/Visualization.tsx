@@ -26,7 +26,7 @@ export default class Visualization extends React.Component<VisualizationProps, V
   public state: VisualizationState = defaultVisualizationState;
 
   public componentDidUpdate(prevProps) {
-    if (this.props.data != prevProps.data) // hack
+    if (this.props.data != prevProps.data || this.props.options != prevProps.options) // hack
       this.setState({ displayData: rawDataToDisplay(this.props.data, this.props.options) });
     this.drawData();
   }
