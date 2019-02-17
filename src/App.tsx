@@ -6,6 +6,8 @@ import "./Resizer.css";
 import { Button } from "@blueprintjs/core";
 import { VisualizationOptions } from "./types";
 import SplitPane from "react-split-pane";
+import { csv } from 'd3';
+import { csvToPoints } from './utils';
 
 // import logo from './logo.svg';
 
@@ -34,12 +36,22 @@ class App extends React.Component<{}, AppState> {
     });
   };
 
+  public componentDidMount() {
+    csv('./joined.csv').then(
+      (table) => {
+        const data = csvToPoints(table); // ordered pairs
+        this.setState({ data });
+      }
+    )
+  }
+
   public render() {
+    const {data, visualizationOptions} = this.state;
     return (
       <div className="App">
         <SplitPane allowResize={false} split="vertical" defaultSize={350} primary="second">
           <div className="visualization-pane">
-            <Visualization />
+            <Visualization data={data} options={visualizationOptions}/>
           </div>
           <div>
             <AppSidebar
