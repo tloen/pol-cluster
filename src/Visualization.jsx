@@ -19,7 +19,7 @@ export default class Visualization extends React.Component {
     )
   }
 
-  drawData(data) {    
+  drawData(data) {
     var width = 500;
     var height = 500;
     var margin = {top: 20, right: 20, bottom: 30, left: 40};
@@ -46,15 +46,24 @@ export default class Visualization extends React.Component {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // add the tooltip area to the webpage
+    /*
     var tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
-        .style("opacity", 0);
+        .style("opacity", 0);*/
+
+    var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("color", "white")
+    .text("a simple tooltip");
 
     /*
     var data = [
       [0.7, 0.8, "Republican"],
       [0.8, 0.8, "Democrat"],
-      [-0.4, -0.8, "Democrat"], 
+      [-0.4, -0.8, "Democrat"],
       [-0.2, 0.2, "Republican"],
       [-0.2, 0.1, "Democrat"],
       [0.6, 0.2, "Republican"]
@@ -85,7 +94,21 @@ export default class Visualization extends React.Component {
         .attr("r", 3.5)
         .attr("cx", xMap)
         .attr("cy", yMap)
+        .attr("full_name", function(d) { return d[3]; })
+        .attr("state", function(d) { return d[4]; })
+        .attr("gender", function(d) { return d[5]; })
         .style("fill", function(d) { return colormap(cValue(d)); } )
+        .on("mouseover", function(d) {
+          d3.select(this).attr("r", 10);
+          return tooltip.style("visibility", "visible")
+            .style("left", d3.select(this).attr("cx") + "px")
+            .style("top", d3.select(this).attr("cy") + "px")
+            .text(d3.select(this).attr("full_name") + ", " + d3.select(this).attr("state") + ", " + d3.select(this).attr("gender"));
+        })
+        .on("mouseout", function(d) {
+          d3.select(this).attr("r", 3.5);
+          return tooltip.style("visibility", "hidden");
+        });
   }
 
   render() {
