@@ -7,11 +7,16 @@ import * as d3 from "d3";
 export default class Visualization extends React.Component {
   componentDidMount() {
     console.log('mounted')
+    d3.csv('./votes_transform.csv').then(
+      (csv) => {
+        const points = csvToPoints(csv); // ordered pairs
+      }
+    )
     var context = (document.getElementById("content")).getContext("2d");
 
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-    var size = d3.min([width, height]);
+    var width = 500;
+    var height = 500;
+    var margin = {top: 20, right: 20, bottom: 30, left: 40};
 
     console.log(d3.select("#content"))
 
@@ -19,6 +24,112 @@ export default class Visualization extends React.Component {
       .attr("width", width + "px")
       .attr("height", height + "px");
 
+    /*
+     * value accessor - returns the value to encode for a given data object.
+     * scale - maps value to a visual display encoding, such as a pixel position.
+     * map function - maps from data value to display value
+     * axis - sets up axis
+     */
+
+    // setup x
+    var xValue = function(d) { return d[0];}, // data -> value
+        xScale = d3.scaleLinear().range([0, width]), // value -> display
+        xMap = function(d) { return xScale(xValue(d));}, // data -> display
+        xAxis = d3.axisBottom().scale(xScale);
+
+    // setup y
+    var yValue = function(d) { return d[1];}, // data -> value
+        yScale = d3.scaleLinear().range([height, 0]), // value -> display
+        yMap = function(d) { return yScale(yValue(d));}, // data -> display
+        yAxis = d3.axisLeft().scale(yScale);
+
+    // setup fill color
+    var cValue = function(d) { return d[2];},
+        color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // add the graph canvas to the body of the webpage
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // add the tooltip area to the webpage
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    var data = [
+      [0.7, 0.8, "Republican"],
+      [0.8, 0.8, "Democrat"],
+      [-0.4, -0.8, "Democrat"], 
+      [-0.2, 0.2, "Republican"],
+      [-0.2, 0.1, "Democrat"],
+      [0.6, 0.2, "Republican"]
+    ]
+
+    // don't want dots overlapping axis, so add in buffer to data domain
+    xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
+    yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+
+    // x-axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+
+    // draw dots
+    svg.selectAll(".dot")
+        .data(data)
+      .enter().append("circle")
+        .attr("class", "dot")
+        .attr("r", 3.5)
+        .attr("cx", xMap)
+        .attr("cy", yMap)
+        .style("fill", function(d) { return color(cValue(d));})
+        /*.on("mouseover", function(d) {
+            tooltip.transition()
+                 .duration(200)
+                 .style("opacity", .9);
+            tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d)
+            + ", " + yValue(d) + ")")
+                 .style("left", (d3.event.pageX + 5) + "px")
+                 .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            tooltip.transition()
+                 .duration(500)
+                 .style("opacity", 0);
+        })*/;
+
+    // draw legend
+    /*var legend = svg.selectAll(".legend")
+        .data(color.domain())
+      .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    // draw legend colored rectangles
+    legend.append("rect")
+        .attr("x", width - 18)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", color);
+
+    // draw legend text
+    legend.append("text")
+        .attr("x", width - 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(function(d) { return d;})
+    */
+
+    /*
     context.lineWidth = 0.4;
     context.strokeStyle = "rgba(255, 255, 255, 0.6)";
 
@@ -59,10 +170,12 @@ export default class Visualization extends React.Component {
       window.requestAnimationFrame(update);
     }
 
-    window.requestAnimationFrame(update);
+    window.requestAnimationFrame(update); */
   }
 
   render() {
-    return <canvas id="content"></canvas>;
+    return <div className="content-container">
+      <canvas id="content" />
+    </div>;
   }
 }

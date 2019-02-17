@@ -1,25 +1,54 @@
-import * as React from 'react';
-import AppSidebar from './AppSidebar';
+import * as React from "react";
+import AppSidebar from "./AppSidebar";
 import Visualization from "./Visualization";
-import './App.css';
+import "./App.css";
+import "./Resizer.css";
+import { Button } from "@blueprintjs/core";
+import { VisualizationOptions } from "./types";
+import SplitPane from "react-split-pane";
 
 // import logo from './logo.svg';
 
-class App extends React.Component {
+interface AppState {
+  data?: any;
+  visualizationOptions: VisualizationOptions;
+  sidebarOpen: boolean;
+}
+
+const defaultAppState: AppState = {
+  data: {},
+  visualizationOptions: {},
+  sidebarOpen: true
+};
+
+class App extends React.Component<{}, AppState> {
+  public state: AppState = defaultAppState;
+
+  private closeSidebar = (): void => {
+    this.setState({ sidebarOpen: false });
+  };
+
+  private updateVizOptions = (update: Partial<VisualizationOptions>): void => {
+    this.setState({
+      visualizationOptions: { ...this.state.visualizationOptions, update }
+    });
+  };
+
   public render() {
     return (
       <div className="App">
-        {/*
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> und save to reload.
-        </p>*/
-        }
-        <Visualization />
-        <AppSidebar />
+        <SplitPane allowResize={false} split="vertical" defaultSize={350} primary="second">
+          <div className="visualization-pane">
+            <Visualization />
+          </div>
+          <div style={{backgroundColor: ""}}>
+            <AppSidebar
+              open={this.state.sidebarOpen}
+              closeSidebar={this.closeSidebar}
+              updateOptions={this.updateVizOptions}
+            />
+          </div>
+        </SplitPane>
       </div>
     );
   }
