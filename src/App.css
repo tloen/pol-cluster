@@ -1,8 +1,11 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/select/lib/css/blueprint-select.css";
 
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,600,600i');
+
 .App {
   text-align: center;
+  font-family: "Fira Sans", Arial, Helvetica, sans-serif
 }
 
 .App-logo {
