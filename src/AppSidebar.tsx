@@ -4,7 +4,6 @@ import classnames from "classnames";
 import { VisualizationOptions } from "./types";
 import "./AppSidebar.css";
 
-
 interface AppSidebarProps {
   open: boolean;
   closeSidebar: () => void;
@@ -17,38 +16,49 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
       <>
         <div className={classnames(Classes.DRAWER_BODY, "app-sidebar")}>
           <div className={Classes.DRAWER_HEADER}>
-            <h2>You'll cowards don't even smoke crack</h2>
+            <h2>Exploring policy space</h2>
           </div>
           <div className={Classes.DIALOG_BODY}>
             <p>
               <strong>A Calamari Comitatus production</strong>
             </p>
             <p>
-              Palantir Foundry radically reimagines the way enterprises interact
-              with data by amplifying and extending the power of data
-              integration. With Foundry, anyone can source, fuse, and transform
-              data into any shape they desire. Business analysts become data
-              engineers — and leaders in their organization’s data revolution.
+              Consider Jean-Paul Sartre. Sartre has the example of the
+              restaurant waiter, who follows strict, preprogrammed rules and
+              denies his true freedom. The waiter is act in bad faith: he
+              restricts the space of the things he think he might do, and hides
+              from himself the fact that we can be doing basically anything at
+              basically any time. In forgetting his own freedom, he avoids responsibility for his actions as a waiter.
             </p>
             <p>
-              Foundry’s back end includes a suite of best-in-class data
-              integration capabilities: data provenance, git-style versioning
-              semantics, granular access controls, branching, transformation
-              authoring, and more. But these powers are not limited to the
-              back-end IT shop.
+              In the limit, Sartre says that we should aspire to an authentic
+              human existence of infinite entropy, where at any given moment the
+              probability distribution is evenly spread over innumerable
+              possibilities (rather than concentrated by habit, routine, or
+              social commitment). The enormous burden of the entropy this adds
+              is called anguish. And it’s a good thing.
             </p>
             <p>
-              In Foundry, tables, applications, reports, presentations, and
-              spreadsheets operate as data integrations in their own right.
-              Access controls, transformation logic, and data quality flow from
-              original data source to intermediate analysis to presentation in
-              real time. Every end product created in Foundry becomes a new data
-              source that other users can build upon. And the enterprise data
-              foundation goes where the business drives it.
+              Consider Tyler Cowen. Tyler makes a distinction between
+              complacency and disruptiveness. Complacent individuals don’t spend
+              much time outside their comfort zone. They interact with people
+              like them, they stay in the same place, and they listen to the
+              same music and shop at the same stores all the time.
             </p>
             <p>
-              Start the revolution. Unleash the power of data integration with
-              Palantir Foundry.
+              Complacency is a condition where entropy has fallen below healthy
+              levels (either that, or it’s all being channeled into mentally
+              exhausting information work), leading to stagnation on a larger
+              scale. The solution is to inject more entropy in an almost
+              methodical manner: getting off social media, talking to Uber
+              drivers, making decisions based on coin flips, applying to jobs in
+              new cities. Cowen’s disruptiveness is destabilizing. It’s a kind
+              of rootless, centerless, capitalist-Protestant restlessness that
+              trades short-term comfort for long-term fulfilment.
+            </p>
+            <p>
+              Between the existentialist and the libertarian, two facts emerge.
+              First, that entropy is a good thing. Second, that it can be uncomfortable as hell.
             </p>
           </div>
         </div>
