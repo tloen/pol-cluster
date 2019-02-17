@@ -113,7 +113,13 @@ export default class Visualization extends React.Component<VisualizationProps, V
         .data(data)
       .enter().append("circle")
         .attr("class", "dot")
-        .attr("r", 5.5)
+        .attr("r", function(d) {
+            if (options.selected && d[3] == options.selected.full_name) {
+              return 10;
+            } else {
+              return 5.5;
+            }
+          })
         .attr("cx", xMap)
         .attr("cy", yMap)
         .attr("opacity", "0.5")
@@ -123,7 +129,7 @@ export default class Visualization extends React.Component<VisualizationProps, V
         .style("fill", function(d) { return colormap(cValue(d)); } )
         .on("mouseover", function(d) {
           d3.select(this).attr("r", 10);
-          return tooltip.style("visibility", "visible")
+          tooltip.style("visibility", "visible")
             /*.style("margin-top", "180px")
             .style("margin-left", "430px")*/
             .style("left", (d3.event.pageX+10) + "px")
