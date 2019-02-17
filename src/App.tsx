@@ -4,21 +4,21 @@ import Visualization from "./Visualization";
 import "./App.css";
 import "./Resizer.css";
 import { Button } from "@blueprintjs/core";
-import { VisualizationOptions } from "./types";
+import { VisualizationOptions, RawData } from "./types";
 import SplitPane from "react-split-pane";
 import { csv } from 'd3';
-import { csvToPoints } from './utils';
+import { csvToRawData } from './utils';
 
 // import logo from './logo.svg';
 
 interface AppState {
-  data?: any;
+  data: RawData | null;
   visualizationOptions: VisualizationOptions;
   sidebarOpen: boolean;
 }
 
 const defaultAppState: AppState = {
-  data: {},
+  data: null,
   visualizationOptions: {},
   sidebarOpen: true
 };
@@ -39,7 +39,7 @@ class App extends React.Component<{}, AppState> {
   public componentDidMount() {
     csv('./joined.csv').then(
       (table) => {
-        const data = csvToPoints(table); // ordered pairs
+        const data = csvToRawData(table); // ordered pairs
         this.setState({ data });
       }
     )
