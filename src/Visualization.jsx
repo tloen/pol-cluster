@@ -9,8 +9,8 @@ export default class Visualization extends React.Component {
     console.log('mounted')
     var context = (document.getElementById("content")).getContext("2d");
 
-    var width = window.innerWidth;
-    var height = window.innerHeight;
+    var width = 500; //window.innerWidth;
+    var height = 500; //window.innerHeight;
     var size = d3.min([width, height]);
 
     console.log(d3.select("#content"))

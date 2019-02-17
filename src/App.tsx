@@ -2,8 +2,10 @@ import * as React from "react";
 import AppSidebar from "./AppSidebar";
 import Visualization from "./Visualization";
 import "./App.css";
+import "./Resizer.css";
 import { Button } from "@blueprintjs/core";
 import { VisualizationOptions } from "./types";
+import SplitPane from "react-split-pane";
 
 // import logo from './logo.svg';
 
@@ -35,13 +37,18 @@ class App extends React.Component<{}, AppState> {
   public render() {
     return (
       <div className="App">
-        <Visualization />
-        <Button text="Options" />
-        <AppSidebar
-          open={this.state.sidebarOpen}
-          closeSidebar={this.closeSidebar}
-          updateOptions={this.updateVizOptions}
-        />
+        <SplitPane allowResize={false} split="vertical" defaultSize={350} primary="second">
+          <div className="visualization-pane">
+            <Visualization />
+          </div>
+          <div style={{backgroundColor: ""}}>
+            <AppSidebar
+              open={this.state.sidebarOpen}
+              closeSidebar={this.closeSidebar}
+              updateOptions={this.updateVizOptions}
+            />
+          </div>
+        </SplitPane>
       </div>
     );
   }

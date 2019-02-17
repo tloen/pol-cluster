@@ -2,6 +2,8 @@ import * as React from "react";
 import { Button, Classes, Drawer } from "@blueprintjs/core";
 import classnames from "classnames";
 import { VisualizationOptions } from "./types";
+import "./AppSidebar.css";
+
 
 interface AppSidebarProps {
   open: boolean;
@@ -12,23 +14,14 @@ interface AppSidebarProps {
 export default class AppSidebar extends React.Component<AppSidebarProps> {
   public render() {
     return (
-      <Drawer
-        // className={this.props.data.themeName}
-        icon="heatmap"
-        // onClose={this.handleClose}
-        title="Pol-Cluster"
-        // {...this.state}
-        isOpen={this.props.open}
-        hasBackdrop={false}
-        autoFocus={false}
-        size={Drawer.SIZE_SMALL}
-      >
-        <div className={classnames(Classes.DRAWER_BODY)}>
+      <>
+        <div className={classnames(Classes.DRAWER_BODY, "app-sidebar")}>
+          <div className={Classes.DRAWER_HEADER}>
+            <h2>You'll cowards don't even smoke crack</h2>
+          </div>
           <div className={Classes.DIALOG_BODY}>
             <p>
-              <strong>
-                A Calamari Comitatus production
-              </strong>
+              <strong>A Calamari Comitatus production</strong>
             </p>
             <p>
               Palantir Foundry radically reimagines the way enterprises interact
@@ -60,12 +53,9 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
           </div>
         </div>
         <div className={Classes.DRAWER_FOOTER}>
-          <Button 
-            text="Close"
-            onClick={this.props.closeSidebar}
-          />
+          <Button text="Close" onClick={this.props.closeSidebar} />
         </div>
-      </Drawer>
+      </>
     );
   }
 }
