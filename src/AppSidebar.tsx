@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Classes, Drawer, MenuItem } from "@blueprintjs/core";
+import { Button, Classes, Drawer, MenuItem, Divider } from "@blueprintjs/core";
 import classnames from "classnames";
 import { VisualizationOptions, RawData, RawRow } from "./types";
 import { Select, IItemRendererProps, ItemRenderer } from "@blueprintjs/select";
@@ -52,7 +52,6 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
                 icon="person"
                 rightIcon="double-caret-vertical" />
             </SenatorSelect>
-
             <p>
               <strong>A Calamari Comitatus production</strong>
             </p>
