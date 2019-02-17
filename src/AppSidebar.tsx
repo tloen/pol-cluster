@@ -55,7 +55,8 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
             <div className="checkboxes">
             {
               categoryList.map(
-                (category) => <Checkbox label={category} checked={options.selectedCategories.indexOf(category) !== -1} onChange={() => {
+                (category) => <Checkbox label={category} checked={options.selectedCategories.indexOf(category) !== -1}
+                disabled={options.selectedCategories.indexOf(category) !== -1 && options.selectedCategories.length === 1} onChange={() => {
                   const i = options.selectedCategories.indexOf(category);
                   const selcat = [...options.selectedCategories]
                   if (i !== -1) {
