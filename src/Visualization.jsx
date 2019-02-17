@@ -9,7 +9,7 @@ import "./Visualization.css";
 export default class Visualization extends React.Component {
   componentDidMount() {
     console.log('mounted')
-    d3.csv('./votes_transform.csv').then(
+    d3.csv('./joined.csv').then(
       (csv) => {
         const data = csvToPoints(csv); // ordered pairs
         this.drawData(data);
@@ -83,7 +83,7 @@ export default class Visualization extends React.Component {
         .attr("r", 3.5)
         .attr("cx", xMap)
         .attr("cy", yMap)
-        .style("fill", function(d) { return '#fff'; } )
+        .style("fill", function(d) { return color(cValue(d)); } )
 
   }
 
