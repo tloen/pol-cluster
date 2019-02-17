@@ -124,8 +124,13 @@ export default class Visualization extends React.Component<VisualizationProps, V
         .on("mouseover", function(d) {
           d3.select(this).attr("r", 10);
           return tooltip.style("visibility", "visible")
-            .style("left", d3.select(this).attr("cx") + "px")
-            .style("top", d3.select(this).attr("cy") + "px")
+            /*.style("margin-top", "180px")
+            .style("margin-left", "430px")*/
+            .style("left", (d3.event.pageX+10) + "px")
+            .style("top", (d3.event.pageY-25) + "px")
+            .style("font-size", "14pt")
+            .style("font-weight", "bold")
+            .style("color", "#1e1e1e")
             .text(d3.select(this).attr("full_name") + ", " + d3.select(this).attr("state") + ", " + d3.select(this).attr("gender"));
         })
         .on("mouseout", function(d) {
