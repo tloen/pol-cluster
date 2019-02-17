@@ -63,6 +63,8 @@ export default class Visualization extends React.Component {
   }
 
   render() {
-    return <canvas id="content"></canvas>;
+    return <div className="content-container">
+      <canvas id="content" />
+    </div>;
   }
 }
