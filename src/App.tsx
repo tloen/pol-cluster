@@ -19,7 +19,9 @@ interface AppState {
 
 const defaultAppState: AppState = {
   data: null,
-  visualizationOptions: {},
+  visualizationOptions: {
+    selected: null
+  },
   sidebarOpen: true
 };
 
@@ -32,7 +34,7 @@ class App extends React.Component<{}, AppState> {
 
   private updateVizOptions = (update: Partial<VisualizationOptions>): void => {
     this.setState({
-      visualizationOptions: { ...this.state.visualizationOptions, update }
+      visualizationOptions: { ...this.state.visualizationOptions, ...update }
     });
   };
 
@@ -55,6 +57,8 @@ class App extends React.Component<{}, AppState> {
           </div>
           <div>
             <AppSidebar
+              data={this.state.data}
+              options={this.state.visualizationOptions}
               open={this.state.sidebarOpen}
               closeSidebar={this.closeSidebar}
               updateOptions={this.updateVizOptions}

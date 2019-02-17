@@ -1,4 +1,6 @@
-export interface VisualizationOptions {}
+export interface VisualizationOptions {
+  selected: RawRow | null;
+}
 
 export type PointData = [number, number, string, string, string, string];
 

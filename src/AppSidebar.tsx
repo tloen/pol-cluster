@@ -1,17 +1,43 @@
 import * as React from "react";
-import { Button, Classes, Drawer } from "@blueprintjs/core";
+import { Button, Classes, Drawer, MenuItem } from "@blueprintjs/core";
 import classnames from "classnames";
-import { VisualizationOptions } from "./types";
+import { VisualizationOptions, RawData, RawRow } from "./types";
+import { Select, IItemRendererProps, ItemRenderer } from "@blueprintjs/select";
 import "./AppSidebar.css";
 
 interface AppSidebarProps {
+  data: RawData;
   open: boolean;
   closeSidebar: () => void;
   updateOptions: (update: Partial<VisualizationOptions>) => void;
+  options: VisualizationOptions;
+}
+
+const SenatorSelect = Select.ofType<RawRow>();
+
+const senatorPredicate = (query: string, item: RawRow): boolean =>
+  item.full_name.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) !== -1;
+
+const renderSenator: ItemRenderer<RawRow> = (senator, { handleClick, modifiers, query }) => {
+  return <MenuItem
+    active={modifiers.active}
+    label={senator.party}
+    onClick={handleClick}
+    text={senator.full_name}
+    key={senator.full_name}
+  />
 }
 
 export default class AppSidebar extends React.Component<AppSidebarProps> {
+
+  private selectSenator = (senator: RawRow | null) => {
+    this.props.updateOptions({
+      selected: senator
+    });
+  }
+
   public render() {
+    const { data, options } = this.props;
     return (
       <>
         <div className={classnames(Classes.DRAWER_BODY, "app-sidebar")}>
@@ -19,6 +45,14 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
             <h2>Exploring policy space</h2>
           </div>
           <div className={Classes.DIALOG_BODY}>
+            <SenatorSelect items={data || []} itemPredicate={senatorPredicate} itemRenderer={renderSenator} onItemSelect={this.selectSenator}>
+              <Button text={
+                (options.selected && options.selected.full_name) || 
+                (data != null && "Pick a senator...") || "No senators loaded"} 
+                icon="person"
+                rightIcon="double-caret-vertical" />
+            </SenatorSelect>
+
             <p>
               <strong>A Calamari Comitatus production</strong>
             </p>
@@ -28,7 +62,8 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
               denies his true freedom. The waiter is act in bad faith: he
               restricts the space of the things he think he might do, and hides
               from himself the fact that we can be doing basically anything at
-              basically any time. In forgetting his own freedom, he avoids responsibility for his actions as a waiter.
+              basically any time. In forgetting his own freedom, he avoids
+              responsibility for his actions as a waiter.
             </p>
             <p>
               In the limit, Sartre says that we should aspire to an authentic
@@ -58,7 +93,8 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
             </p>
             <p>
               Between the existentialist and the libertarian, two facts emerge.
-              First, that entropy is a good thing. Second, that it can be uncomfortable as hell.
+              First, that entropy is a good thing. Second, that it can be
+              uncomfortable as hell.
             </p>
           </div>
         </div>
