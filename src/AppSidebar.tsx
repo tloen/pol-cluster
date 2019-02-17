@@ -74,46 +74,34 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
               <strong>A Calamari Comitatus production</strong>
             </p>
             <p>
-              Consider Jean-Paul Sartre. Sartre has the example of the
-              restaurant waiter, who follows strict, preprogrammed rules and
-              denies his true freedom. The waiter is act in bad faith: he
-              restricts the space of the things he think he might do, and hides
-              from himself the fact that we can be doing basically anything at
-              basically any time. In forgetting his own freedom, he avoids
-              responsibility for his actions as a waiter.
-            </p>
-            <p>
-              In the limit, Sartre says that we should aspire to an authentic
-              human existence of infinite entropy, where at any given moment the
-              probability distribution is evenly spread over innumerable
-              possibilities (rather than concentrated by habit, routine, or
-              social commitment). The enormous burden of the entropy this adds
-              is called anguish. And it’s a good thing.
-            </p>
-            <p>
-              Consider Tyler Cowen. Tyler makes a distinction between
-              complacency and disruptiveness. Complacent individuals don’t spend
-              much time outside their comfort zone. They interact with people
-              like them, they stay in the same place, and they listen to the
-              same music and shop at the same stores all the time.
-            </p>
-            <p>
-              Complacency is a condition where entropy has fallen below healthy
-              levels (either that, or it’s all being channeled into mentally
-              exhausting information work), leading to stagnation on a larger
-              scale. The solution is to inject more entropy in an almost
-              methodical manner: getting off social media, talking to Uber
-              drivers, making decisions based on coin flips, applying to jobs in
-              new cities. Cowen’s disruptiveness is destabilizing. It’s a kind
-              of rootless, centerless, capitalist-Protestant restlessness that
-              trades short-term comfort for long-term fulfilment.
-            </p>
-            <p>
-              Between the existentialist and the libertarian, two facts emerge.
-              First, that entropy is a good thing. Second, that it can be
-              uncomfortable as hell.
-            </p>
-          </div>
+              Imagine that one day you're watching the news with your friend and this
+              politician who you don't know pops up on the TV. "Who's Kirsten Gillibrand?"
+              you ask your friend. "What does she believe?"
+
+              "Oh, well, she's sorta like Elizabeth Warren," your friend might answer.
+              Now, while this is obviously oversimplifying things, there's some truth here.
+              Kirsten Gillibrand is definitely more like Elizabeth Warren then like Ted Cruz.
+              But how would you even begin to compare the two?
+
+              For starters, you could look at voting records. See what percentage of policy
+              issues these two politicians agree on. But what if what you want to go further
+              than individual politicians and understand groups of politicians? And maybe even
+              identify clusters and voting blocks between them.
+
+              Well, you could use this neat machine learning algorithm called
+              principal components analysis (PCA). Here, we use PCA to find the two
+              most significant variables that influence how senators vote.  We can then
+              use this information to visualize naturally arising groups of polticians
+              with similar behaviors and beliefs. 
+
+              The most obvious cluster is political party--no matter the issue, our senators
+              appear to be deeply partisan. But if you look closer, you'll find a few other
+              interesting clusters, like a small group of democratic-socialist-leaning
+              politicians around Bernie Sanders. 
+
+              So go ahead, play around and see if you can find a few other interesting trends! 
+             </p>
+         </div>
         </div>
         <div className={Classes.DRAWER_FOOTER}>
           <Button text="Close" onClick={this.props.closeSidebar} />
