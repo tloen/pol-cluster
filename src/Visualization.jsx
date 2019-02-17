@@ -3,35 +3,26 @@
 
 import * as React from "react";
 import * as d3 from "d3";
+import { csvToPoints } from "./utils";
+import "./Visualization.css";
+
+const colormap = s => ({"Republican": "#f00", "Democrat": "#00f"}[s]);
 
 export default class Visualization extends React.Component {
   componentDidMount() {
     console.log('mounted')
-    d3.csv('./votes_transform.csv').then(
+    d3.csv('./joined.csv').then(
       (csv) => {
-        const points = csvToPoints(csv); // ordered pairs
+        const data = csvToPoints(csv); // ordered pairs
+        this.drawData(data);
       }
     )
-    var context = (document.getElementById("content")).getContext("2d");
+  }
 
+  drawData(data) {    
     var width = 500;
     var height = 500;
     var margin = {top: 20, right: 20, bottom: 30, left: 40};
-
-    console.log(d3.select("#content"))
-
-    d3.select("#content")
-      .attr("width", width + "px")
-      .attr("height", height + "px");
-
-    /*
-     * value accessor - returns the value to encode for a given data object.
-     * scale - maps value to a visual display encoding, such as a pixel position.
-     * map function - maps from data value to display value
-     * axis - sets up axis
-     */
-
-    // setup x
     var xValue = function(d) { return d[0];}, // data -> value
         xScale = d3.scaleLinear().range([0, width]), // value -> display
         xMap = function(d) { return xScale(xValue(d));}, // data -> display
@@ -48,7 +39,7 @@ export default class Visualization extends React.Component {
         color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // add the graph canvas to the body of the webpage
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#vector").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
       .append("g")
@@ -59,6 +50,7 @@ export default class Visualization extends React.Component {
         .attr("class", "tooltip")
         .style("opacity", 0);
 
+    /*
     var data = [
       [0.7, 0.8, "Republican"],
       [0.8, 0.8, "Democrat"],
@@ -67,6 +59,7 @@ export default class Visualization extends React.Component {
       [-0.2, 0.1, "Democrat"],
       [0.6, 0.2, "Republican"]
     ]
+    */
 
     // don't want dots overlapping axis, so add in buffer to data domain
     xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
@@ -75,11 +68,13 @@ export default class Visualization extends React.Component {
     // x-axis
     svg.append("g")
         .attr("class", "x axis")
+        .attr("class", "axisWhite")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
 
     svg.append("g")
         .attr("class", "y axis")
+        .attr("class", "axisWhite")
         .call(yAxis)
 
     // draw dots
@@ -90,92 +85,12 @@ export default class Visualization extends React.Component {
         .attr("r", 3.5)
         .attr("cx", xMap)
         .attr("cy", yMap)
-        .style("fill", function(d) { return color(cValue(d));})
-        /*.on("mouseover", function(d) {
-            tooltip.transition()
-                 .duration(200)
-                 .style("opacity", .9);
-            tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d)
-            + ", " + yValue(d) + ")")
-                 .style("left", (d3.event.pageX + 5) + "px")
-                 .style("top", (d3.event.pageY - 28) + "px");
-        })
-        .on("mouseout", function(d) {
-            tooltip.transition()
-                 .duration(500)
-                 .style("opacity", 0);
-        })*/;
-
-    // draw legend
-    /*var legend = svg.selectAll(".legend")
-        .data(color.domain())
-      .enter().append("g")
-        .attr("class", "legend")
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-    // draw legend colored rectangles
-    legend.append("rect")
-        .attr("x", width - 18)
-        .attr("width", 18)
-        .attr("height", 18)
-        .style("fill", color);
-
-    // draw legend text
-    legend.append("text")
-        .attr("x", width - 24)
-        .attr("y", 9)
-        .attr("dy", ".35em")
-        .style("text-anchor", "end")
-        .text(function(d) { return d;})
-    */
-
-    /*
-    context.lineWidth = 0.4;
-    context.strokeStyle = "rgba(255, 255, 255, 0.6)";
-
-    var projection = d3
-      .geoOrthographic()
-      .scale(0.45 * size)
-      .translate([0.5 * width, 0.5 * height]);
-
-    var geoGenerator = d3
-      .geoPath()
-      .projection(projection)
-      .context(context);
-
-    var geojson = {
-      type: "Feature",
-      geometry: { type: "LineString", coordinates: [] }
-    };
-    function rndLon() {
-      return -180 + Math.random() * 360;
-    }
-    function rndLat() {
-      return -90 + Math.random() * 180;
-    }
-    function addPoint() {
-      geojson.geometry.coordinates.push([rndLon(), rndLat()]);
-    }
-
-    function update(t) {
-      if (geojson.geometry.coordinates.length < 6000) addPoint();
-
-      projection.rotate([t / 1000, 0]);
-
-      context.clearRect(0, 0, width, height);
-      context.beginPath();
-      geoGenerator(geojson);
-      context.stroke();
-
-      window.requestAnimationFrame(update);
-    }
-
-    window.requestAnimationFrame(update); */
+        .style("fill", function(d) { return colormap(cValue(d)); } )
   }
 
   render() {
     return <div className="content-container">
-      <canvas id="content" />
+      <div id="vector" />
     </div>;
   }
 }
