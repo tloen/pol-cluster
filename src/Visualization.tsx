@@ -5,34 +5,35 @@ import * as React from "react";
 import * as d3 from "d3";
 import { csvToPoints } from "./utils";
 import "./Visualization.css";
+import { DisplayData, VisualizationOptions } from "./types";
 
-const colormap = s => ({"Republican": "#f00", "Democrat": "#00f"}[s]);
+const colormap = (s: string) => ({"Republican": "#f00", "Democrat": "#00f"}[s]);
 
-export default class Visualization extends React.Component {
-  componentDidMount() {
-    console.log('mounted')
-    d3.csv('./joined.csv').then(
-      (csv) => {
-        const data = csvToPoints(csv); // ordered pairs
-        this.drawData(data);
-      }
-    )
+export interface VisualizationProps {
+  options: VisualizationOptions;
+  data: DisplayData;
+}
+
+export default class Visualization extends React.Component<VisualizationProps> {
+  public componentDidUpdate() {
+    const { data } = this.props;
+    this.drawData(data);
   }
 
-  drawData(data) {
+  public drawData(data: DisplayData) {
     var width = 500;
     var height = 500;
     var margin = {top: 20, right: 20, bottom: 30, left: 40};
     var xValue = function(d) { return d[0];}, // data -> value
         xScale = d3.scaleLinear().range([0, width]), // value -> display
         xMap = function(d) { return xScale(xValue(d));}, // data -> display
-        xAxis = d3.axisBottom().scale(xScale);
+        xAxis = d3.axisBottom(xScale);
 
     // setup y
     var yValue = function(d) { return d[1];}, // data -> value
         yScale = d3.scaleLinear().range([height, 0]), // value -> display
         yMap = function(d) { return yScale(yValue(d));}, // data -> display
-        yAxis = d3.axisLeft().scale(yScale);
+        yAxis = d3.axisLeft(yScale);
 
     // setup fill color
     var cValue = function(d) { return d[2];},
@@ -58,17 +59,6 @@ export default class Visualization extends React.Component {
     .style("visibility", "hidden")
     .style("color", "white")
     .text("a simple tooltip");
-
-    /*
-    var data = [
-      [0.7, 0.8, "Republican"],
-      [0.8, 0.8, "Democrat"],
-      [-0.4, -0.8, "Democrat"],
-      [-0.2, 0.2, "Republican"],
-      [-0.2, 0.1, "Democrat"],
-      [0.6, 0.2, "Republican"]
-    ]
-    */
 
     // don't want dots overlapping axis, so add in buffer to data domain
     xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
@@ -111,7 +101,7 @@ export default class Visualization extends React.Component {
         });
   }
 
-  render() {
+  public render() {
     return <div className="content-container">
       <div id="vector" />
     </div>;
