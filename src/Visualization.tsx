@@ -170,7 +170,7 @@ export default class Visualization extends React.Component<
       });
   };
 
-  public drawData = _.debounce(this.drawDataUnconditionally, 500);
+  public drawData = _.debounce(this.drawDataUnconditionally, 20);
 
   public render() {
     return (
