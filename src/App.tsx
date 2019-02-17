@@ -4,10 +4,11 @@ import Visualization from "./Visualization";
 import "./App.css";
 import "./Resizer.css";
 import { Button } from "@blueprintjs/core";
-import { VisualizationOptions, RawData } from "./types";
+import { VisualizationOptions, RawData, categoryList } from "./types";
 import SplitPane from "react-split-pane";
-import { csv } from 'd3';
-import { csvToRawData } from './utils';
+import { csv } from "d3";
+import { csvToRawData } from "./utils";
+import { types } from 'util';
 
 // import logo from './logo.svg';
 
@@ -20,7 +21,8 @@ interface AppState {
 const defaultAppState: AppState = {
   data: null,
   visualizationOptions: {
-    selected: null
+    selected: null,
+    selectedCategories: [...categoryList]
   },
   sidebarOpen: true
 };
@@ -39,21 +41,24 @@ class App extends React.Component<{}, AppState> {
   };
 
   public componentDidMount() {
-    csv('./joined.csv').then(
-      (table) => {
-        const data = csvToRawData(table); // ordered pairs
-        this.setState({ data });
-      }
-    )
+    csv("./joined.csv").then(table => {
+      const data = csvToRawData(table); // ordered pairs
+      this.setState({ data });
+    });
   }
 
   public render() {
-    const {data, visualizationOptions} = this.state;
+    const { data, visualizationOptions } = this.state;
     return (
       <div className="App">
-        <SplitPane allowResize={false} split="vertical" defaultSize={350} primary="second">
+        <SplitPane
+          allowResize={false}
+          split="vertical"
+          defaultSize={350}
+          primary="second"
+        >
           <div className="visualization-pane">
-            <Visualization data={data} options={visualizationOptions}/>
+            <Visualization data={data} options={visualizationOptions} />
           </div>
           <div>
             <AppSidebar

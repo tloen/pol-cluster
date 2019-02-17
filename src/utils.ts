@@ -1,6 +1,7 @@
 import { DSVRowArray, DSVRowString } from 'd3';
 import { PointData, DisplayData, RawRow, RawData, VisualizationOptions } from './types';
 import _ from "lodash";
+import categories from "./categories";
 import PCA from 'ml-pca';
 
 const parseRow = (row: DSVRowString): RawRow => {
@@ -20,7 +21,11 @@ export function csvToRawData(csv: d3.DSVRowArray): RawData {
 }
 
 export function rawDataToDisplay(rawData: RawData, options: VisualizationOptions): DisplayData {
-  const votes = rawData.map(row => row.votes);
+  const { selectedCategories } = options;
+  console.log(options);
+  const votes = rawData.map(row => row.votes).map(
+    v => v.filter((value, index) => _.some(selectedCategories, category => categories[index][category]))
+  );
   const party = rawData.map(row => row.party);
   const full_name = rawData.map(row => row.full_name);
   const state = rawData.map(row => row.state);

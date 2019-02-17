@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Button, Classes, Drawer, MenuItem, Divider } from "@blueprintjs/core";
+import { Button, Classes, Drawer, MenuItem, Divider, Checkbox } from "@blueprintjs/core";
 import classnames from "classnames";
-import { VisualizationOptions, RawData, RawRow } from "./types";
+import { VisualizationOptions, RawData, RawRow, categoryList } from "./types";
 import { Select, IItemRendererProps, ItemRenderer } from "@blueprintjs/select";
 import "./AppSidebar.css";
 
@@ -42,7 +42,7 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
       <>
         <div className={classnames(Classes.DRAWER_BODY, "app-sidebar")}>
           <div className={Classes.DRAWER_HEADER}>
-            <h2>Exploring policy space</h2>
+            <h2>The Shape of Politics</h2> 
           </div>
           <div className={Classes.DIALOG_BODY}>
             <SenatorSelect items={data || []} itemPredicate={senatorPredicate} itemRenderer={renderSenator} onItemSelect={this.selectSenator}>
@@ -52,6 +52,22 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
                 icon="person"
                 rightIcon="double-caret-vertical" />
             </SenatorSelect>
+            <br />
+            {
+              categoryList.map(
+                (category) => <Checkbox label={category} checked={options.selectedCategories.indexOf(category) !== -1} onChange={() => {
+                  const i = options.selectedCategories.indexOf(category);
+                  const selcat = [...options.selectedCategories]
+                  if (i !== -1) {
+                    selcat.splice(i, 1);
+                    this.props.updateOptions({ selectedCategories: selcat });
+                  } else {
+                    this.props.updateOptions({ selectedCategories: selcat.concat(category) });
+                  }
+                }}
+                key={category}/>
+              )
+            }
             <p>
               <strong>A Calamari Comitatus production</strong>
             </p>

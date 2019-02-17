@@ -2,6 +2,7 @@
   "name": "pol-cluster",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://stanford.edu/~ejwang/pol-cluster",
   "dependencies": {
     "@blueprintjs/core": "^3.13.0",
     "@blueprintjs/select": "^3.6.1",
