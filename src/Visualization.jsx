@@ -6,6 +6,8 @@ import * as d3 from "d3";
 import { csvToPoints } from "./utils";
 import "./Visualization.css";
 
+const colormap = s => ({"Republican": "#f00", "Democrat": "#00f"}[s]);
+
 export default class Visualization extends React.Component {
   componentDidMount() {
     console.log('mounted')
@@ -83,8 +85,7 @@ export default class Visualization extends React.Component {
         .attr("r", 3.5)
         .attr("cx", xMap)
         .attr("cy", yMap)
-        .style("fill", function(d) { return color(cValue(d)); } )
-
+        .style("fill", function(d) { return colormap(cValue(d)); } )
   }
 
   render() {
