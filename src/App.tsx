@@ -41,7 +41,7 @@ class App extends React.Component<{}, AppState> {
           <div className="visualization-pane">
             <Visualization />
           </div>
-          <div style={{backgroundColor: ""}}>
+          <div>
             <AppSidebar
               open={this.state.sidebarOpen}
               closeSidebar={this.closeSidebar}

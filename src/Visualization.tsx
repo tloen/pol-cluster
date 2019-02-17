@@ -5,11 +5,12 @@ import * as React from "react";
 import * as d3 from "d3";
 import { csvToPoints } from "./utils";
 import "./Visualization.css";
+import { DisplayData } from "./types";
 
 const colormap = s => ({"Republican": "#f00", "Democrat": "#00f"}[s]);
 
 export default class Visualization extends React.Component {
-  componentDidMount() {
+  public componentDidMount() {
     console.log('mounted')
     d3.csv('./joined.csv').then(
       (csv) => {
@@ -19,20 +20,20 @@ export default class Visualization extends React.Component {
     )
   }
 
-  drawData(data) {    
+  public drawData(data: DisplayData) {    
     var width = 500;
     var height = 500;
     var margin = {top: 20, right: 20, bottom: 30, left: 40};
     var xValue = function(d) { return d[0];}, // data -> value
         xScale = d3.scaleLinear().range([0, width]), // value -> display
         xMap = function(d) { return xScale(xValue(d));}, // data -> display
-        xAxis = d3.axisBottom().scale(xScale);
+        xAxis = d3.axisBottom(xScale);
 
     // setup y
     var yValue = function(d) { return d[1];}, // data -> value
         yScale = d3.scaleLinear().range([height, 0]), // value -> display
         yMap = function(d) { return yScale(yValue(d));}, // data -> display
-        yAxis = d3.axisLeft().scale(yScale);
+        yAxis = d3.axisLeft(yScale);
 
     // setup fill color
     var cValue = function(d) { return d[2];},
@@ -88,7 +89,7 @@ export default class Visualization extends React.Component {
         .style("fill", function(d) { return colormap(cValue(d)); } )
   }
 
-  render() {
+  public render() {
     return <div className="content-container">
       <div id="vector" />
     </div>;
