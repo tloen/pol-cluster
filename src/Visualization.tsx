@@ -8,6 +8,7 @@ import { DisplayData, VisualizationOptions, RawData } from "./types";
 import { rawDataToDisplay } from "./utils";
 import ReactResizeDetector from "react-resize-detector";
 import _ from "lodash";
+import { openSync } from "fs";
 
 const colormap = (s: string) => ({ Republican: "#f00", Democrat: "#00f" }[s]);
 
@@ -33,7 +34,9 @@ export default class Visualization extends React.Component<
   public componentDidUpdate(prevProps) {
     if (
       this.props.data != prevProps.data ||
-      this.props.options != prevProps.options
+      this.props.options.selected != prevProps.options.selected ||
+      this.props.options.selectedCategories !=
+        prevProps.options.selectedCategories
     )
       // hack
       this.setState({
@@ -46,8 +49,8 @@ export default class Visualization extends React.Component<
     const { options } = this.props;
     const { displayData: data } = this.state;
 
-    var width = (width || 625) * .7;
-    var height = (height || 625) * .7;
+    var width = (width || 625) * 0.7;
+    var height = (height || 625) * 0.7;
     var margin = { top: 20, right: 20, bottom: 30, left: 40 };
     var xValue = function(d) {
         return d[0];
@@ -128,12 +131,12 @@ export default class Visualization extends React.Component<
       .append("circle")
       .attr("class", "dot")
       .attr("r", function(d) {
-          if (options.selected && d[3] == options.selected.full_name) {
-            return 10;
-          } else {
-            return 5.5;
-          }
-        })
+        if (options.selected && d[3] == options.selected.full_name) {
+          return 20;
+        } else {
+          return 5.5;
+        }
+      })
       .attr("cx", xMap)
       .attr("cy", yMap)
       .attr("opacity", "0.5")
@@ -150,7 +153,13 @@ export default class Visualization extends React.Component<
         return colormap(cValue(d));
       })
       .on("mouseover", function(d) {
-        d3.select(this).attr("r", 10);
+        d3.select(this).attr("r", function(d) {
+          if (options.selected && d[3] == options.selected.full_name) {
+            return 20;
+          } else {
+            return 10;
+          }
+        });
         return (
           tooltip
             .style("visibility", "visible")
@@ -168,11 +177,22 @@ export default class Visualization extends React.Component<
                 ", " +
                 d3.select(this).attr("gender")
             )
+            .transition()
+            .duration(500)
+            .style("opacity", 1)
         );
       })
       .on("mouseout", function(d) {
-        d3.select(this).attr("r", 5.5);
-        return tooltip.style("visibility", "hidden");
+        d3.select(this).attr("r", d => {
+          if (options.selected && d[3] == options.selected.full_name) {
+            return 20;
+          } else {
+            return 5.5;
+          }
+        });
+        tooltip.transition()
+        .duration(500)
+        .style("opacity", 0)
       });
   };
 
@@ -181,14 +201,14 @@ export default class Visualization extends React.Component<
   public render() {
     return (
       <>
-      <ReactResizeDetector
+        <ReactResizeDetector
           handleWidth
           handleHeight
           onResize={this.drawData}
         />
-      <div className="content-container">
-        <div id="vector" />
-      </div>
+        <div className="content-container">
+          <div id="vector" />
+        </div>
       </>
     );
   }
