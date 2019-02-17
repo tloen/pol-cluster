@@ -1,3 +1,5 @@
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+
 .App {
   text-align: center;
 }
@@ -20,6 +22,14 @@
 
 .App-intro {
   font-size: large;
+}
+
+.sidebar {
+  width: 250px;
+}
+
+#content {
+  background-color: #39474F;
 }
 
 @keyframes App-logo-spin {

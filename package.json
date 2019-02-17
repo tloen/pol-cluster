@@ -3,9 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@blueprintjs/core": "^3.13.0",
+    "@types/d3": "^5.7.1",
+    "@types/react-sidebar": "^3.0.0",
+    "classnames": "^2.2.6",
+    "d3": "^5.9.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "react-scripts-ts": "3.1.0"
+    "react-scripts-ts": "3.1.0",
+    "react-sidebar": "^3.0.2"
   },
   "scripts": {
     "start": "react-scripts-ts start",
