@@ -77,11 +77,18 @@ export default class Visualization extends React.Component<VisualizationProps, V
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // add the tooltip area to the webpage
-    var tooltip = d3
-      .select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
+    /*
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);*/
+
+    var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("color", "white")
+    .text("a simple tooltip");
 
     // don't want dots overlapping axis, so add in buffer to data domain
     xScale.domain([d3.min(data, xValue) - 1, d3.max(data, xValue) + 1]);
@@ -102,18 +109,29 @@ export default class Visualization extends React.Component<VisualizationProps, V
       .call(yAxis);
 
     // draw dots
-    svg
-      .selectAll(".dot")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("class", "dot")
-      .attr("r", 3.5)
-      .attr("cx", xMap)
-      .attr("cy", yMap)
-      .style("fill", function(d) {
-        return colormap(cValue(d));
-      });
+    svg.selectAll(".dot")
+        .data(data)
+      .enter().append("circle")
+        .attr("class", "dot")
+        .attr("r", 5.5)
+        .attr("cx", xMap)
+        .attr("cy", yMap)
+        .attr("opacity", "0.5")
+        .attr("full_name", function(d) { return d[3]; })
+        .attr("state", function(d) { return d[4]; })
+        .attr("gender", function(d) { return d[5]; })
+        .style("fill", function(d) { return colormap(cValue(d)); } )
+        .on("mouseover", function(d) {
+          d3.select(this).attr("r", 10);
+          return tooltip.style("visibility", "visible")
+            .style("left", d3.select(this).attr("cx") + "px")
+            .style("top", d3.select(this).attr("cy") + "px")
+            .text(d3.select(this).attr("full_name") + ", " + d3.select(this).attr("state") + ", " + d3.select(this).attr("gender"));
+        })
+        .on("mouseout", function(d) {
+          d3.select(this).attr("r", 5.5);
+          return tooltip.style("visibility", "hidden");
+        });
   }
 
   public render() {

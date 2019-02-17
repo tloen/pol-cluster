@@ -1,11 +1,13 @@
 .axisWhite line{
-  stroke: white;
+  stroke: darkgrey;
 }
 
 .axisWhite path{
-  stroke: white;
+  stroke: darkgrey;
 }
 
 .axisWhite text{
-  fill: white;
+  fill: black;
+  font-size: 10pt;
+  font-family: Helvetica;
 }

@@ -4,10 +4,13 @@ import _ from "lodash";
 import PCA from 'ml-pca';
 
 const parseRow = (row: DSVRowString): RawRow => {
-  const { bioguide, bioguide_id: id, party, ...votes } = row;
+  const { bioguide, bioguide_id: id, party, full_name, state, gender, ...votes } = row;
   return {
     party,
-    votes: _.values(votes).map(parseFloat)
+    votes: _.values(votes).map(parseFloat),
+    full_name,
+    state,
+    gender
   };
 }
 
@@ -19,8 +22,11 @@ export function csvToRawData(csv: d3.DSVRowArray): RawData {
 export function rawDataToDisplay(rawData: RawData, options: VisualizationOptions): DisplayData {
   const votes = rawData.map(row => row.votes);
   const party = rawData.map(row => row.party);
+  const full_name = rawData.map(row => row.full_name);
+  const state = rawData.map(row => row.state);
+  const gender = rawData.map(row => row.gender);
   const pca = new PCA(votes);
   const principalComponents: number[][] = pca.predict(votes).map(x => x.slice(0, 2));
-  const pointsData = principalComponents.map((x: any[], i) => x.concat(party[i]));
+  const pointsData = principalComponents.map((x: any[], i) => x.concat([party[i], full_name[i], state[i], gender[i]]));
   return pointsData as DisplayData;
-} 
+}
