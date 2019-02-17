@@ -3,17 +3,15 @@
 
 import * as React from "react";
 import * as d3 from "d3";
-import _ from "lodash";
-import { csvToPoints } from "./utils";
 
 export default class Visualization extends React.Component {
   componentDidMount() {
+    console.log('mounted')
     d3.csv('./votes_transform.csv').then(
       (csv) => {
         const points = csvToPoints(csv); // ordered pairs
       }
     )
-    
     var context = (document.getElementById("content")).getContext("2d");
 
     var width = 500;
