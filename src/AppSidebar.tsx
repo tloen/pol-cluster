@@ -52,7 +52,7 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
                 icon="person"
                 rightIcon="double-caret-vertical" />
             </SenatorSelect>
-            <br />
+            <div className="checkboxes">
             {
               categoryList.map(
                 (category) => <Checkbox label={category} checked={options.selectedCategories.indexOf(category) !== -1} onChange={() => {
@@ -68,6 +68,7 @@ export default class AppSidebar extends React.Component<AppSidebarProps> {
                 key={category}/>
               )
             }
+            </div>
             <p>
               <strong>A Calamari Comitatus production</strong>
             </p>
