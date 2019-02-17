@@ -1,8 +1,15 @@
 import * as React from "react";
 import { Button, Classes, Drawer } from "@blueprintjs/core";
 import classnames from "classnames";
+import { VisualizationOptions } from "./types";
 
-export default class AppSidebar extends React.Component {
+interface AppSidebarProps {
+  open: boolean;
+  closeSidebar: () => void;
+  updateOptions: (update: Partial<VisualizationOptions>) => void;
+}
+
+export default class AppSidebar extends React.Component<AppSidebarProps> {
   public render() {
     return (
       <Drawer
@@ -11,7 +18,7 @@ export default class AppSidebar extends React.Component {
         // onClose={this.handleClose}
         title="Pol-Cluster"
         // {...this.state}
-        isOpen={true}
+        isOpen={this.props.open}
         hasBackdrop={false}
         autoFocus={false}
         size={Drawer.SIZE_SMALL}
@@ -55,6 +62,7 @@ export default class AppSidebar extends React.Component {
         <div className={Classes.DRAWER_FOOTER}>
           <Button 
             text="Close"
+            onClick={this.props.closeSidebar}
           />
         </div>
       </Drawer>
