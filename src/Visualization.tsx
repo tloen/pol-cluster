@@ -6,6 +6,8 @@ import * as d3 from "d3";
 import "./Visualization.css";
 import { DisplayData, VisualizationOptions, RawData } from "./types";
 import { rawDataToDisplay } from "./utils";
+import ReactResizeDetector from "react-resize-detector";
+import _ from "lodash";
 
 const colormap = (s: string) => ({ Republican: "#f00", Democrat: "#00f" }[s]);
 
@@ -22,21 +24,30 @@ const defaultVisualizationState: VisualizationState = {
   displayData: null
 };
 
-export default class Visualization extends React.Component<VisualizationProps, VisualizationState> {
+export default class Visualization extends React.Component<
+  VisualizationProps,
+  VisualizationState
+> {
   public state: VisualizationState = defaultVisualizationState;
 
   public componentDidUpdate(prevProps) {
-    if (this.props.data != prevProps.data || this.props.options != prevProps.options) // hack
-      this.setState({ displayData: rawDataToDisplay(this.props.data, this.props.options) });
+    if (
+      this.props.data != prevProps.data ||
+      this.props.options != prevProps.options
+    )
+      // hack
+      this.setState({
+        displayData: rawDataToDisplay(this.props.data, this.props.options)
+      });
     this.drawData();
   }
 
-  public drawData() {
+  private drawDataUnconditionally = (width?: number, height?: number) => {
     const { options } = this.props;
     const { displayData: data } = this.state;
 
-    var width = 500;
-    var height = 500;
+    var width = (width || 625) * .7;
+    var height = (height || 625) * .7;
     var margin = { top: 20, right: 20, bottom: 30, left: 40 };
     var xValue = function(d) {
         return d[0];
@@ -82,13 +93,14 @@ export default class Visualization extends React.Component<VisualizationProps, V
         .attr("class", "tooltip")
         .style("opacity", 0);*/
 
-    var tooltip = d3.select("body")
-    .append("div")
-    .style("position", "absolute")
-    .style("z-index", "10")
-    .style("visibility", "hidden")
-    .style("color", "white")
-    .text("a simple tooltip");
+    var tooltip = d3
+      .select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden")
+      .style("color", "white")
+      .text("a simple tooltip");
 
     // don't want dots overlapping axis, so add in buffer to data domain
     xScale.domain([d3.min(data, xValue) - 1, d3.max(data, xValue) + 1]);
@@ -109,41 +121,69 @@ export default class Visualization extends React.Component<VisualizationProps, V
       .call(yAxis);
 
     // draw dots
-    svg.selectAll(".dot")
-        .data(data)
-      .enter().append("circle")
-        .attr("class", "dot")
-        .attr("r", 5.5)
-        .attr("cx", xMap)
-        .attr("cy", yMap)
-        .attr("opacity", "0.5")
-        .attr("full_name", function(d) { return d[3]; })
-        .attr("state", function(d) { return d[4]; })
-        .attr("gender", function(d) { return d[5]; })
-        .style("fill", function(d) { return colormap(cValue(d)); } )
-        .on("mouseover", function(d) {
-          d3.select(this).attr("r", 10);
-          return tooltip.style("visibility", "visible")
+    svg
+      .selectAll(".dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "dot")
+      .attr("r", 5.5)
+      .attr("cx", xMap)
+      .attr("cy", yMap)
+      .attr("opacity", "0.5")
+      .attr("full_name", function(d) {
+        return d[3];
+      })
+      .attr("state", function(d) {
+        return d[4];
+      })
+      .attr("gender", function(d) {
+        return d[5];
+      })
+      .style("fill", function(d) {
+        return colormap(cValue(d));
+      })
+      .on("mouseover", function(d) {
+        d3.select(this).attr("r", 10);
+        return (
+          tooltip
+            .style("visibility", "visible")
             /*.style("margin-top", "180px")
             .style("margin-left", "430px")*/
-            .style("left", (d3.event.pageX+10) + "px")
-            .style("top", (d3.event.pageY-25) + "px")
+            .style("left", d3.event.pageX + 10 + "px")
+            .style("top", d3.event.pageY - 25 + "px")
             .style("font-size", "14pt")
             .style("font-weight", "bold")
             .style("color", "#1e1e1e")
-            .text(d3.select(this).attr("full_name") + ", " + d3.select(this).attr("state") + ", " + d3.select(this).attr("gender"));
-        })
-        .on("mouseout", function(d) {
-          d3.select(this).attr("r", 5.5);
-          return tooltip.style("visibility", "hidden");
-        });
-  }
+            .text(
+              d3.select(this).attr("full_name") +
+                ", " +
+                d3.select(this).attr("state") +
+                ", " +
+                d3.select(this).attr("gender")
+            )
+        );
+      })
+      .on("mouseout", function(d) {
+        d3.select(this).attr("r", 5.5);
+        return tooltip.style("visibility", "hidden");
+      });
+  };
+
+  public drawData = _.debounce(this.drawDataUnconditionally, 500);
 
   public render() {
     return (
+      <>
+      <ReactResizeDetector
+          handleWidth
+          handleHeight
+          onResize={this.drawData}
+        />
       <div className="content-container">
         <div id="vector" />
       </div>
+      </>
     );
   }
 }
